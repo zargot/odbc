@@ -41,7 +41,7 @@ proc listDrivers*(con: ODBCConnection = nil): seq[SQLDriverInfo] =
 
   env = newEnvHandle(rpt)
 
-  setODBCType(env, con.reporting)
+  setODBCType(env, rpt)
 
   direction = SQL_FETCH_FIRST
 
