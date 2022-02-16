@@ -1,4 +1,5 @@
-import odbcsql, odbcerrors, odbcconnections, odbcreporting, odbchandles
+import odbcerrors, odbcconnections, odbcreporting, odbchandles
+import odbcsqlext
 
 type
   SQLDriverAttribute* = tuple[key, value: string]

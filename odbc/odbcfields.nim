@@ -1,5 +1,6 @@
-import odbcsql, odbctypes, tables, odbcerrors, times
+import odbctypes, tables, odbcerrors, times
 from strutils import toLowerAscii
+import odbcsqlext
 
 type
   SQLFieldObj = object

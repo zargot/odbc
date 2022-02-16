@@ -9,11 +9,12 @@
 # sense to SQLBindCol simple types and SQLGetData larger, variable types in future.
 
 import
-  odbcsql,
   times,
   tables,
   typetraits,
   strutils
+
+import odbc/odbcsqlext
 
 when defined(odbcdebug):
   import strformat

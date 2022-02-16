@@ -1,7 +1,7 @@
 # Handle stuff
 # NOTE that at the moment, this unit must be included in odbc to be compiled
 
-import odbcsql, odbcerrors, odbcreporting
+import odbcsqlext, odbcerrors, odbcreporting
 
 type
   ODBCHandleType* = enum

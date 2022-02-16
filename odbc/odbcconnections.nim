@@ -1,4 +1,6 @@
-import odbcsql, odbcerrors, strutils, odbchandles, odbcreporting
+import odbcerrors, strutils, odbchandles, odbcreporting
+import odbcsqlext
+
 when defined(odbcUseQuitProc):
   import tables, strformat
 

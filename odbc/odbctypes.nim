@@ -1,4 +1,5 @@
-import times, odbcsql, typetraits, tables, strutils, unicode, odbcerrors
+import times, typetraits, tables, strutils, unicode, odbcerrors
+import odbcsqlext
 
 const
   nullValue* = ""

@@ -1,5 +1,6 @@
-import odbcsql, odbctypes, tables, odbcerrors, times, odbcreporting, strformat, odbcfields
+import odbctypes, tables, odbcerrors, times, odbcreporting, strformat, odbcfields
 import strutils
+import odbcsqlext
 
 var
   # Default buffer size for parameters and also
