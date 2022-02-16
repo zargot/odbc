@@ -198,14 +198,14 @@ proc `timeout=`*(con: var ODBCConnection, conTimeout: int) =
 
 proc connect*(con: var ODBCConnection): bool =
   var
-    outstr: string = newString(256)
-    outstr_len: TSqlSmallInt
-    conStr: string
+    outstr_len: TSqlSmallInt = 1024
+    outstr = newWideCString(outstr_len)
+    conStr: WideCString
 
   if con.connectionString != "":
-    conStr = con.connectionString
+    conStr = con.connectionString.newWideCString
   else:
-    conStr = con.getConnectionString
+    conStr = con.getConnectionString.newWideCString
 
   con.envHandle = newEnvHandle(con.reporting)
   setODBCType(con.envHandle, con.reporting)
@@ -215,11 +215,11 @@ proc connect*(con: var ODBCConnection): bool =
   # M008: 'Dialog failed' may occur if you do not use SQL_DRIVER_NOPROMPT
   # and don't supply a login/pw as we are not passing a windows handle to display the dialog.
   var
-    ret = SQLDriverConnect(con.conHandle, nil, conStr, conStr.len.TSqlSmallInt,
-      outstr, 255.TSqlSmallInt, outstr_len, SQL_DRIVER_NOPROMPT)
-
+    ret = SQLDriverConnectW(con.conHandle, nil, conStr, conStr.len.TSqlSmallInt,
+      outstr, outstr_len, outstr_len, SQL_DRIVER_NOPROMPT)
   rptOnErr(con.reporting, ret, "SQLDriverConnect", con.conHandle, SQL_HANDLE_DBC.TSqlSmallInt)
-  outstr.setLen(outstr_len.int)
+
+  con.connectionString = $outstr
   con.connected = ret.sqlSucceeded
   result = con.connected
 
