@@ -140,13 +140,13 @@ proc fetchRow*(qry: SQLQuery, row: var SQLRow): bool =
     for colIdx in 1..colCount:
       var
         colDetail = qry.colFields[colIdx - 1]
-        size: int
+        size = colDetail.size
+      if size == 0 and colDetail.colType in {ctString, ctUnicodeStr, ctBinary}:
+        size += 4000
       if colDetail.colType.isString:
         colDetail.sqlType = SQL_WCHAR
         # Add a space for zero terminator and account for WideChar
-        size = (colDetail.size + 1) * 2
-      else:
-        size = colDetail.size
+        size = (size + 1) * 2
 
       size += 4 # Padding
 
