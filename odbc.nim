@@ -168,19 +168,18 @@ proc fetchRow*(qry: SQLQuery, row: var SQLRow): bool =
       when defined(odbcdebug): echo &"SQLGetData returned {res}, with indicator: {indicator}"
 
       # handle variable size data
-      if res == SQL_SUCCESS_WITH_INFO:
-        if indicator != SQL_NO_TOTAL and indicator != SQL_NULL_DATA:
-          let total = indicator
-          let retrieved = size
-          let rem = total - retrieved
-          let actualSize = total
-          qry.dataBuf = realloc(qry.dataBuf, actualSize)
-          let p = cast[pointer](cast[uint](qry.dataBuf) + size.uint)
-          res = SQLGetData(qry.handle, colIdx.SqlUSmallInt, colDetail.cType,
-                           p, rem, addr(indicator))
-          rptOnErr(qry.con.reporting, res, "SQLGetData", qry.handle, SQL_HANDLE_STMT.TSqlSmallInt)
-          when defined(odbcdebug): echo &"SQLGetData returned {res}, with indicator: {indicator}"
-          indicator = actualSize
+      if res == SQL_SUCCESS_WITH_INFO and indicator > 0:
+        let total = indicator
+        let retrieved = size
+        let rem = total - retrieved
+        let actualSize = total
+        qry.dataBuf = realloc(qry.dataBuf, actualSize)
+        let p = cast[pointer](cast[uint](qry.dataBuf) + size.uint)
+        res = SQLGetData(qry.handle, colIdx.SqlUSmallInt, colDetail.cType,
+                         p, rem, addr(indicator))
+        rptOnErr(qry.con.reporting, res, "SQLGetData", qry.handle, SQL_HANDLE_STMT.TSqlSmallInt)
+        when defined(odbcdebug): echo &"SQLGetData returned {res}, with indicator: {indicator}"
+        indicator = actualSize
 
       if indicator == SQL_NO_TOTAL:
         when defined(odbcdebug): echo "No Total"
